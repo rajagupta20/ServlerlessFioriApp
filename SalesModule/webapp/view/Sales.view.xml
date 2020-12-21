@@ -1,0 +1,49 @@
+<mvc:View controllerName="ns.SalesModule.controller.Sales" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page id="page" title="{i18n>title}">
+					<content>
+                    
+                    <List noDataText="Drop list items here" id="list0" items="{/BusinessPartnerSet}">
+					        <items>
+					            <StandardListItem type="Navigation" title="{CompanyName}" description="Email: {EmailAddress} Website: {WebAddress}" icon="sap-icon://picture" id="item0"/>
+					        </items>
+					    </List>
+
+                         <VBox>
+				<Text id="detailsActiveImage" text="Serverless Fiori App - Architecture Diagram " class="sapUiSmallMarginBottom" />
+				<Image  src="/ns.nsSalesModule/images/FioriArchitecture.png" width="50%"
+					 />
+
+                <List
+                    headerText="Reference Materials"
+                     >
+                    <items>
+                        <DisplayListItem
+                            label="Tutorial1"
+                            value="Serverless SAP Fiori Apps on SAP Cloud Platform - Concepts"
+                            type="Active"
+                            press="tutorial1Press" />
+                        <DisplayListItem
+                            label="Tutorial 2"
+                            value="Building a Serverless Fiori App and add into Central Launchpad"
+                            type="Active"
+                            press="tutorial2Press" />    
+                        <DisplayListItem
+                            label="Git Source Code"
+                            value="https://github.com/rajagupta20/ServlerlessFioriApp"
+                            type="Active"
+                            press="gitHubPress" />
+                        
+                    </items>
+                </List>     
+                     
+			</VBox>
+                    
+                    </content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>

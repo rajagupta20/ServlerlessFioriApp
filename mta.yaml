@@ -1,0 +1,81 @@
+_schema-version: "3.2"
+ID: SalesOrders
+version: 0.0.1
+modules:
+- name: SalesOrders-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: uaa_SalesOrders
+    parameters:
+      service-key:
+        name: uaa_SalesOrders-key
+  - name: SalesOrders_html_repo_host
+    parameters:
+      service-key:
+        name: SalesOrders_html_repo_host-key
+  - name: SalesOrders-destination-service
+    parameters:
+      content-target: true
+  parameters:
+    content:
+      subaccount:
+        destinations:
+        - Name: ns_SalesOrders_html_repo_host
+          ServiceInstanceName: SalesOrders-html5-app-host-service
+          ServiceKeyName: SalesOrders_html_repo_host-key
+          sap.cloud.service: ns
+        - Authentication: OAuth2UserTokenExchange
+          Name: ns_uaa_SalesOrders
+          ServiceInstanceName: SalesOrders-xsuaa-service
+          ServiceKeyName: uaa_SalesOrders-key
+          sap.cloud.service: ns
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+- name: SalesOrders_ui_deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: SalesOrders_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - SalesModule-content.zip
+      name: SalesModule
+      target-path: resources/
+- name: SalesModule
+  type: html5
+  path: SalesModule
+  build-parameters:
+    builder: custom
+    commands:
+    - npm run build
+    supported-platforms: []
+resources:
+- name: SalesOrders-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: destination
+    service-name: SalesOrders-destination-service
+    service-plan: lite
+- name: SalesOrders_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: SalesOrders-html5-app-host-service
+    service-plan: app-host
+- name: uaa_SalesOrders
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: SalesOrders-xsuaa-service
+    service-plan: application
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm install
